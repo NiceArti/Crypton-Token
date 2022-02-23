@@ -6,7 +6,6 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-import { Address } from "cluster";
 
 dotenv.config();
 
@@ -28,10 +27,9 @@ task("approve", "Increases allowance for recipient to transfer owner's amount")
 .addParam("amount", "The INT amount you withdraw", 0, types.int)
 .setAction(async (taskArgs, hre) => 
 {
-  const Token = await hre.ethers.getContractFactory("ERC20");
-  const instance = await Token.attach(deployedAddress);
+  const Token = await hre.ethers.getContractAt("ERC20", deployedAddress);
 
-  await instance.approve(taskArgs.to, taskArgs.amount)
+  await Token.approve(taskArgs.to, taskArgs.amount)
   console.log(`You gave permision ${taskArgs.to} to use ${taskArgs.amount} INT for transfers`)
 });
 
